@@ -1,70 +1,20 @@
-import { useEffect, useRef } from 'react'
-import { MC } from '../theme.js'
-
-const COLORS = [MC.genetic, MC.emotional, MC.language, MC.motivation]
-
+import { useRef } from 'react'
+import { C } from '../theme.js'
 export default function Particles() {
-  const canvasRef = useRef(null)
-  const frameRef = useRef(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-
-    function resize() {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    const COUNT = 40
-    const particles = Array.from({length: COUNT}, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 1.5 + 0.5,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      alpha: Math.random() * 0.4 + 0.1,
-    }))
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      particles.forEach(p => {
-        p.x += p.vx
-        p.y += p.vy
-        if (p.x < 0) p.x = canvas.width
-        if (p.x > canvas.width) p.x = 0
-        if (p.y < 0) p.y = canvas.height
-        if (p.y > canvas.height) p.y = 0
-
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = p.color
-        ctx.globalAlpha = p.alpha
-        ctx.fill()
-        ctx.globalAlpha = 1
-      })
-      frameRef.current = requestAnimationFrame(draw)
-    }
-
-    draw()
-    return () => {
-      cancelAnimationFrame(frameRef.current)
-      window.removeEventListener('resize', resize)
-    }
-  }, [])
-
+  const ps = useRef(Array.from({length:20},(_,i)=>({
+    i,x:Math.random()*100,y:Math.random()*100,
+    sz:Math.random()*2+0.5,op:Math.random()*0.3+0.1,
+    d:Math.random()*8+6,dl:Math.random()*-10,
+  }))).current
   return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position:'absolute',top:0,left:0,
-        width:'100%',height:'100%',
-        pointerEvents:'none',zIndex:0
-      }}
-    />
+    <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0}}>
+      {ps.map(p=><div key={p.i} style={{
+        position:'absolute',left:`${p.x}%`,top:`${p.y}%`,width:p.sz,height:p.sz,
+        borderRadius:'50%',opacity:p.op,
+        background:p.i%3===0?C.cyan:p.i%3===1?C.gold:C.purpleLight,
+        animation:`fp ${p.d}s ease-in-out ${p.dl}s infinite`,
+      }}/>)}
+      <style>{`@keyframes fp{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px) translateX(5px)}}`}</style>
+    </div>
   )
 }
