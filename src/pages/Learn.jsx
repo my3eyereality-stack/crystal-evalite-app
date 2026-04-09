@@ -1,150 +1,54 @@
 import { useState } from 'react'
 import { C, MC } from '../theme.js'
 
-const LESSONS = [
-  {
-    machine:'genetic',
-    title:'The Genetic Machine',
-    summary:'Your body is the primary instrument of consciousness.',
-    steps:[
-      'The genetic machine governs your physical vitality and biological rhythms.',
-      'Exercise, sleep, and nutrition are not optional — they are the foundation.',
-      'When the genetic machine is weak, all other machines lose efficiency.',
-      'Practice: spend 20 minutes in physical movement every day this week.',
-    ]
-  },
-  {
-    machine:'emotional',
-    title:'The Emotional Machine',
-    summary:'Emotions are data, not noise. Learn to read them.',
-    steps:[
-      'The emotional machine transforms chemical signals into felt experience.',
-      'Suppressing emotions depletes it. Expressing them consciously charges it.',
-      'The ability to play — to be fully present — is an emotional superpower.',
-      'Practice: notice one emotion today without judging or changing it.',
-    ]
-  },
-  {
-    machine:'language',
-    title:'The Language Machine',
-    summary:'You think in words. Master the words, master the mind.',
-    steps:[
-      'The language machine reads reality through symbols, metaphors, and narratives.',
-      'The stories you tell about yourself become self-fulfilling programs.',
-      'Creative expression — writing, speaking, art — upgrades this machine.',
-      'Practice: write 3 sentences about who you are becoming, not who you were.',
-    ]
-  },
-  {
-    machine:'motivation',
-    title:'The Motivation Machine',
-    summary:'Will is a muscle. Train it deliberately.',
-    steps:[
-      'The motivation machine converts intention into consistent action.',
-      'Distrust of the process stalls this machine. Trust is the fuel.',
-      'Small completed actions build the habit of completion.',
-      'Practice: pick one thing today and finish it completely, no matter how small.',
-    ]
-  },
+const COURSES = [
+  {id:1,st:'Хит',stC:C.gold,title:'Кристалы. Основы',sub:'4 машины, 8 ключей, ось вращения',price:'Бесплатно',prC:C.green,lessons:12,dur:'3 часа',
+    desc:'Вводный курс в Систему Кристалла EVALITE. Разбираем структуру, четыре машины, базовые аспекты и ось вращения.',
+    mods:['Что такое кристалл','Генетическая машина — Тело','Эмоциональная машина','Языковая машина — Ум','Мотивационная машина — Воля','Кристалл Веры и Реализации']},
+  {id:2,st:'Новый',stC:C.cyan,title:'8 Стратегий Игрока',sub:'Управление, Расширение, Исследование, Счастье',price:'4 990 ₽',prC:C.white,lessons:24,dur:'8 часов',
+    desc:'Глубокое погружение в каждую из 8 стратегий с практическими инструментами.',
+    mods:['Личные границы','Агрессия расширения','Достижение целей','Внутренный свет','Свобода самовыражения','Внутренние трансформации','Социальная гармония','Доверие мирозданию']},
+  {id:3,st:'Скоро',stC:C.purpleLight,title:'Качество жизни. Мастер',sub:'Персональная программа трансформации',price:'14 990 ₽',prC:C.white,lessons:48,dur:'3 месяца',
+    desc:'Мастерская программа с диагностикой, планом прокачки, разборами и сообществом Игроков.',
+    mods:['Полная диагностика кристалла','Персональный план по машинам','Работа с 8 ключами','Еженедельные разборы','Закрытое сообщество','Доступ к ХРОНОС']},
 ]
 
-const MACHINES = ['genetic','emotional','language','motivation']
-
 export default function Learn() {
-  const [active, setActive] = useState(0)
-  const [step, setStep] = useState(0)
-  const lesson = LESSONS[active]
-  const col = MC[lesson.machine]
-  const done = step >= lesson.steps.length
-
-  function next() {
-    if (!done) setStep(s => s + 1)
-  }
-
-  function selectLesson(i) {
-    setActive(i)
-    setStep(0)
-  }
-
+  const [exp, setExp] = useState(null)
   return (
-    <div style={{flex:1,overflowY:'auto',padding:'20px 20px 100px'}}>
-      <p style={{color:C.accent,fontSize:12,letterSpacing:2,textTransform:'uppercase',marginBottom:16}}>LEARN</p>
-
-      <div style={{display:'flex',gap:8,marginBottom:24,overflowX:'auto',paddingBottom:4}}>
-        {LESSONS.map((l, i) => (
-          <button
-            key={i}
-            onClick={() => selectLesson(i)}
-            style={{
-              padding:'8px 14px',borderRadius:20,fontSize:12,whiteSpace:'nowrap',
-              background:active===i ? MC[l.machine]+'20' : 'rgba(255,255,255,0.04)',
-              border:'1px solid '+(active===i ? MC[l.machine]+'60' : C.border),
-              color:active===i ? MC[l.machine] : C.textSecondary,
-              cursor:'pointer',flexShrink:0
-            }}
-          >
-            {l.title.split(' ')[1]}
-          </button>
-        ))}
+    <div style={{padding:'20px 16px 100px'}}>
+      <h2 style={{fontSize:22,fontWeight:700,color:C.white,margin:'0 0 4px'}}>Обучение</h2>
+      <p style={{fontSize:13,color:C.gray,margin:'0 0 16px'}}>Путь от понимания к управлению кристаллом</p>
+      <div style={{display:'flex',justifyContent:'space-between',background:C.bgCard,borderRadius:10,padding:'10px 12px',marginBottom:16,border:'1px solid rgba(255,255,255,0.06)'}}>
+        {[{c:MC.genetic,l:'Тело'},{c:MC.emotional,l:'Эмоции'},{c:MC.language,l:'Ум'},{c:MC.motivation,l:'Воля'}].map(m=>
+          <div key={m.l} style={{display:'flex',alignItems:'center',gap:5}}><div style={{width:7,height:7,borderRadius:'50%',background:m.c,boxShadow:`0 0 5px ${m.c}`}}/><span style={{fontSize:10,color:C.grayLight}}>{m.l}</span></div>
+        )}
       </div>
-
-      <div style={{
-        background:C.surface,borderRadius:16,padding:'20px',
-        border:'1px solid '+col+'30',marginBottom:20
-      }}>
-        <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
-          <div style={{width:8,height:8,borderRadius:'50%',background:col,boxShadow:'0 0 8px '+col}} />
-          <h2 style={{color:C.text,fontSize:18,fontWeight:700,margin:0}}>{lesson.title}</h2>
-        </div>
-        <p style={{color:C.textSecondary,fontSize:14,lineHeight:1.6,margin:0}}>{lesson.summary}</p>
-      </div>
-
-      <div style={{marginBottom:20}}>
-        <div style={{height:3,background:'rgba(255,255,255,0.06)',borderRadius:2,marginBottom:20}}>
-          <div style={{
-            height:'100%',
-            width:(done ? 100 : (step/lesson.steps.length*100))+'%',
-            borderRadius:2,background:col,transition:'width 0.4s'
-          }} />
-        </div>
-
-        {lesson.steps.slice(0, step+1).map((s, i) => (
-          <div key={i} style={{
-            padding:'16px',background:'rgba(255,255,255,0.03)',
-            borderRadius:12,marginBottom:10,
-            border:'1px solid '+(i===step && !done ? col+'40' : C.border)
-          }}>
-            <p style={{color:i===step&&!done ? C.text : C.textSecondary,fontSize:14,lineHeight:1.6,margin:0}}>{s}</p>
+      <div style={{display:'flex',flexDirection:'column',gap:12}}>
+        {COURSES.map(c=>(
+          <div key={c.id} style={{background:C.bgCard,borderRadius:14,border:`1px solid ${c.stC}18`,overflow:'hidden'}}>
+            <div style={{padding:'14px 16px'}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
+                <span style={{fontSize:9,letterSpacing:2,color:c.stC,textTransform:'uppercase',fontWeight:600,padding:'2px 7px',borderRadius:4,background:`${c.stC}15`}}>{c.st}</span>
+                <span style={{fontSize:13,color:c.prC,fontWeight:700}}>{c.price}</span>
+              </div>
+              <h3 style={{fontSize:15,fontWeight:700,color:C.white,margin:'0 0 3px'}}>{c.title}</h3>
+              <p style={{fontSize:11,color:C.gray,margin:'0 0 10px'}}>{c.sub}</p>
+              <div style={{display:'flex',gap:14}}><span style={{fontSize:10,color:C.grayLight}}>◈ {c.lessons} уроков</span><span style={{fontSize:10,color:C.grayLight}}>◷ {c.dur}</span></div>
+              <button onClick={()=>setExp(exp===c.id?null:c.id)} style={{marginTop:10,background:'none',border:'none',cursor:'pointer',color:C.cyan,fontSize:11,padding:0}}>{exp===c.id?'Свернуть ▲':'Подробнее ▼'}</button>
+            </div>
+            {exp===c.id&&<div style={{padding:'0 16px 14px',borderTop:'1px solid rgba(255,255,255,0.05)'}}>
+              <p style={{fontSize:12,color:C.grayLight,lineHeight:1.5,margin:'12px 0'}}>{c.desc}</p>
+              <div style={{display:'flex',flexDirection:'column',gap:6}}>
+                {c.mods.map((m,i)=><div key={i} style={{display:'flex',alignItems:'center',gap:8}}><span style={{fontSize:9,color:C.cyan,fontWeight:700,minWidth:18,textAlign:'right'}}>{String(i+1).padStart(2,'0')}</span><span style={{fontSize:11,color:C.grayLight}}>{m}</span></div>)}
+              </div>
+              <button style={{marginTop:14,width:'100%',padding:'12px',background:c.st==='Скоро'?'rgba(255,255,255,0.06)':`linear-gradient(135deg,${c.stC},${C.purple})`,border:'none',borderRadius:10,cursor:'pointer',color:C.white,fontSize:13,fontWeight:600,opacity:c.st==='Скоро'?0.6:1}}>
+                {c.st==='Скоро'?'Скоро будет доступно':c.price==='Бесплатно'?'Начать бесплатно':'Записаться на курс'}
+              </button>
+            </div>}
           </div>
         ))}
       </div>
-
-      {!done ? (
-        <button
-          onClick={next}
-          style={{
-            width:'100%',padding:'14px',
-            background:col+'20',border:'1px solid '+col+'60',
-            borderRadius:12,color:col,fontSize:15,fontWeight:600,cursor:'pointer'
-          }}
-        >
-          Next step
-        </button>
-      ) : (
-        <div style={{textAlign:'center',padding:'16px 0'}}>
-          <p style={{color:col,fontSize:15,fontWeight:600,marginBottom:12}}>Lesson complete!</p>
-          <button
-            onClick={() => selectLesson((active+1) % LESSONS.length)}
-            style={{
-              padding:'12px 32px',background:C.surface,
-              border:'1px solid '+C.border,borderRadius:12,
-              color:C.textSecondary,fontSize:14,cursor:'pointer'
-            }}
-          >
-            Next lesson
-          </button>
-        </div>
-      )}
     </div>
   )
 }
